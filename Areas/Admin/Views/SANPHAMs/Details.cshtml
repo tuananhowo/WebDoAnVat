@@ -1,0 +1,125 @@
+﻿@model Web.Models.SANPHAM
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Sản phẩm</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Chi tiết sản phẩm</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    <div>
+        <h4>Sản phẩm</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                Loại món ăn
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DANHMUC.TenDanhMuc)
+            </dd>
+
+            <dt>
+                Tên sản phẩn
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenSanPham)
+            </dd>
+
+            <dt>
+                @{
+                    string ImagePath = "~/wwwoot/dataimg/" + Model.AnhBia;
+                }
+                <img src="@Url.Content(ImagePath)" width="200" class="img-thumbnail" />
+            </dt>
+
+            <dt>
+                Ảnh bìa
+            </dt>
+
+            <dt>
+                @{
+                    string ImagePath1 = "~/wwwoot/dataimg/" + Model.Anh1;
+                }
+                <img src="@Url.Content(ImagePath1)" width="200" class="img-thumbnail" />
+            </dt>
+
+            <dt>
+                Ảnh 1
+            </dt>
+
+            <dt>
+                @{
+                    string ImagePath2 = "~/wwwoot/dataimg/" + Model.Anh2;
+                }
+                <img src="@Url.Content(ImagePath2)" width="200" class="img-thumbnail" />
+            </dt>
+
+            <dt>
+                Ảnh 2
+            </dt>
+
+            <dt>
+                Giá tiền
+            </dt>
+
+            <dd>
+                @Web.Models.SANPHAM.ConvertToThousand64_From_Float(Model.GiaTien.ToString("F99").TrimEnd('0').Trim('.')) VNĐ
+            </dd>
+
+            <dt>
+                Giảm giá
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.GiamGia)
+            </dd>
+
+            <dt>
+                Tình trạng
+            </dt>
+
+            @if (Model.TinhTrang == "0")
+            {
+                <dd>Hết hàng</dd>
+            }
+            else if (Model.TinhTrang == "1")
+            {
+                <dd>Còn hàng</dd>
+            }
+            @if (Model.DANHMUC.KieuDM == 2)
+            {
+                <dt>
+                    Số lượng
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.SoLuong)
+                </dd>
+            }
+                <dt>
+                    Mô tả
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.MoTa)
+                </dd>
+
+            </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Cập nhật", "Edit", new { id=Model.ID_SP }) |
+        @Html.ActionLink("Quay lại", "Index")
+    </p>
+</main>

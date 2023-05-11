@@ -1,0 +1,70 @@
+﻿@model Web.Models.Banner
+
+@{
+    ViewBag.Title = "Edit";
+    var ImagePath = "~/wwwoot/dataimg/" +Model.LinkBanner;
+}
+
+<h2>Edit</h2>
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Banner</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Banner")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Sửa thông tin banner</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    @using (Html.BeginForm(Html.BeginForm("Edit", "Banner", FormMethod.Post, new { enctype = "multipart/form-data" })))
+    {
+        @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.LinkBanner)
+    <div class="form-group">
+        Ảnh
+        <div class="col-md-10">
+            <img id="output" class="img-rounded" alt="Ảnh" width="180" height="200" src="@Url.Content(@ImagePath)" />
+            <p><label for="ufile" style="cursor: pointer;">Chọn file ảnh</label></p>
+            <input name="ImageFile" id="ufile" type="file" style="display: none;" onchange="loadFile(event)" />
+
+        </div>
+    </div>
+    <div class="form-group">
+       Thứ tự
+        <div class="col-md-1">
+            <select name="ThuTu" id="ThuTu" class="form-control">
+                <option value="1" @(Model.ThuTu == 1 ? "selected" : "")>1</option>
+                <option value="2" @(Model.ThuTu == 2 ? "selected" : "")>2</option>
+                <option value="3" @(Model.ThuTu == 3 ? "selected" : "")>3</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Lưu" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+    }
+
+    <div>
+        @Html.ActionLink("Quay lại", "Index")
+    </div>
+</main>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    var loadFile = function (event) {
+        var image = document.getElementById('output');
+        image.src = URL.createObjectURL(event.target.files[0]);
+    };
+</script>

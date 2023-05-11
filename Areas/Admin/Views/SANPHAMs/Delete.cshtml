@@ -1,0 +1,106 @@
+﻿@model Web.Models.SANPHAM
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Sản phẩm</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Xóa sản phẩm</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    <div>
+        <h4>Thông tin sản phẩm</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+               Tên danh mục
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DANHMUC.TenDanhMuc)
+            </dd>
+
+            <dt>
+                Tên sản phẩm
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TenSanPham)
+            </dd>
+
+            <dt>
+                Ảnh bìa
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.AnhBia)
+            </dd>
+
+            <dt>
+                Ảnh 1
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Anh1)
+            </dd>
+
+            <dt>
+               Ảnh 2
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Anh2)
+            </dd>
+
+            <dt>
+               Giá tiền
+            </dt>
+
+            <dd>
+                @Web.Models.SANPHAM.ConvertToThousand64_From_Float(Model.GiaTien.ToString("F99").TrimEnd('0').Trim('.')) VNĐ
+            </dd>
+
+            <dt>
+               Giảm giá
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.GiamGia)
+            </dd>
+
+            <dt>
+                Số lượng
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SoLuong)
+            </dd>
+
+            <dt>
+               Mô tả
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.MoTa)
+            </dd>
+
+        </dl>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Xác nhận" class="btn btn-default" /> |
+                @Html.ActionLink("Quay lại", "Index")
+            </div>
+        }
+    </div>
+    </main>

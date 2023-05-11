@@ -1,0 +1,88 @@
+﻿@model IEnumerable<Web.Models.BieuDo>
+@{
+    ViewBag.Title = "Index";
+    var arrTen = new[] { "Chờ đặt hàng", "Đã xác nhận", "Đặt hàng thành công", "Đã thanh toán", "Hủy đơn" };
+    var arrGia = "";
+    for (int i = 0; i < arrTen.Length; i++)
+    {
+        var obj = Model.FirstOrDefault(g => g.TinhTrangBD == i);
+        var soTien = obj != null ? obj.SoTien : 0;
+        var color = "";
+        if (i == 0)
+        {
+            color = "#6220f2";
+        }
+        else if(i == 1)
+        {
+            color = "#0faff6";
+        }
+        else if (i == 2)
+        {
+            color = "#ffd800";
+        }
+        else if (i == 3)
+        {
+            color = "#0e7406";
+        }
+        else if (i == 4)
+        {
+            color = "red";
+        }
+        arrGia += "{ value: "+ soTien + ", itemStyle: { color: '"+color+"' } },";
+    }
+    arrGia.TrimEnd(',');
+    <link href="~/css/csssr.css" rel="stylesheet" />
+}
+
+<!-- End Sidebar-->
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Trang chủ</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">@Session["HoTenAdmin"]</li>
+            </ol>
+        </nav>
+    </div>
+    @using (Html.BeginForm("Index", "Home", new { @class = "search" }))
+    {
+        <div style="display:flex;margin:20px 10px 20px 10px">
+            <h5 style="margin-right:20px;padding:5px">Từ ngày</h5>
+            <input type="date" name="TuNgay"
+                   placeholder="dd-mm-yyyy" value="@Request["TuNgay"]"
+                   min="1997-01-01" max="2030-12-31" class="searchTerm">
+            <h5 style="margin-right:20px;margin-left:20px;padding:5px">đến ngày</h5>
+            <input type="date" name="DenNgay"
+                   placeholder="dd-mm-yyyy" value="@Request["DenNgay"]"
+                   min="1997-01-01" max="2030-12-31" class="searchTerm">
+            <input type="submit" value="Lọc" class="searchButton">
+        </div>
+    }
+
+
+
+    <h2>Biểu đồ thống kê doanh thu theo sản phẩm</h2>
+    <div id="barChart" style="min-height: 400px;" class="echart"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            echarts.init(document.querySelector("#barChart")).setOption({
+                xAxis: {
+                    type: 'category',
+                    data: ['@Html.Raw(string.Join("','", arrTen))']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    data: [@Html.Raw(string.Join(",", arrGia))],
+                    type: 'bar'
+                }]
+            });
+        });
+    </script>
+    <!-- End Bar Chart -->
+
+</main><!-- End #main -->

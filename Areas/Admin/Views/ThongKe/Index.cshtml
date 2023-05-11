@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Web.Models.SANPHAM>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Thống kê sản phẩm</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Thống kê  sản phẩm</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <table class="table">
+            <tr>
+                <th>
+                    Mã sản phẩm
+                </th>
+                <th>
+                    Tên sản phẩm
+                </th>
+                <th>
+                    Số lượng còn
+                </th>
+                <th>
+                    Giá tiền
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID_SP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenSanPham)
+            </td>
+            @if (item.DANHMUC.KieuDM == 2)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.SoLuong)
+                </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+
+            <td>
+                @Web.Models.SANPHAM.ConvertToThousand64_From_Float(item.GiaTien.ToString("F99").TrimEnd('0').Trim('.')) VNĐ
+            </td>
+        </tr>
+            }
+
+        </table>
+    </section>
+</main>

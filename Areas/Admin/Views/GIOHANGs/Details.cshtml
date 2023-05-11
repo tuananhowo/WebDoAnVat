@@ -1,0 +1,179 @@
+﻿@model Web.Models.GIOHANG
+@using Web.Models
+@{
+    ViewBag.Title = "Details";
+    var listtt = ViewData["thanhtoan"] as List<THANHTOAN>;
+    double total = decimal.ToDouble((Model.SANPHAM.GiaTien * Model.SoLuong) * (100 - Convert.ToDecimal(Model.SANPHAM.GiamGia)) / 100);
+    var tt = ViewData["tt"] as List<GIOHANG>;
+}
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Thanh toán</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Thông tin hóa đơn</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    <div id="FormHoSo">
+        <hr />
+        <div class="row" style="margin-bottom:50px">
+            <div class="col-md-12 text-center">
+                <h3 style="font-weight:700">Thông tin hóa đơn</h3>
+            </div>
+            <div class="col-md-12 text-center">
+                <h3 style="font-weight:700">Mã hóa đơn: @Model.ID_ThanhToan</h3>
+            </div>
+            <div class="row" style="margin: 40px 0 0 0;">
+                <table class="tableNo">
+                    <tr>
+                        <td>Tên khách hàng</td>
+                        <td>@Model.TAIKHOAN.HoTen</td>
+                        <td>Địa chỉ giao hàng</td>
+                        <td>@Model.TAIKHOAN.DiaChi</td>
+                    </tr>
+                    <tr>
+                        <td>Số điện thoại người nhận</td>
+                        <td>@Model.TAIKHOAN.SDT</td>
+                        <td>Ngày đặt hàng</td>
+                        <td>
+                            @if (Model.NgayDatHang != null)
+                            {
+                                @Model.NgayDatHang.Value.ToString("dd-MM-yyyy")
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ngày giao hàng</td>
+                        <td>
+                            @if (listtt.Count(g => g.ID_ThanhToan == Model.ID_ThanhToan && g.TinhTrang == 2) > 0)
+                            {
+                                @listtt.FirstOrDefault(g => g.ID_ThanhToan == Model.ID_ThanhToan && g.TinhTrang == 2).NgayTao.ToString("dd-MM-yyyy")
+                            }
+                        </td>
+                        <td>Tình trạng thanh toán</td>
+                        <td>
+                            @if (Model.TinhTrang == 0)
+                            {
+                                <p style=" font-size: 16px;">Chờ đặt hàng</p>
+                            }
+                            @if (Model.TinhTrang == 1)
+                            {
+                                <p style=" font-size: 16px;">Đã xác nhận</p>
+                            }
+                            @if (Model.TinhTrang == 2)
+                            {
+                                <p style=" font-size: 16px;">Đặt hàng thành công</p>
+                            }
+                            @if (Model.TinhTrang == 3)
+                            {
+                                <p style="  font-size: 16px;">Đã thanh toán</p>
+                            }
+                            @if (Model.TinhTrang == 4)
+                            {
+                                <p style=" font-size: 16px;">Hủy đơn</p>
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table class="table">
+                    <tr>
+                        <th>Mã giỏ hàng</th>
+                        <th>Tên sản phẩn</th>
+                        <th>Số lượng</th>
+                        <th>Giá tiền</th>
+                    </tr>
+                    @{ double tong = 0;}
+                    @foreach(var item in tt)
+                    {
+                        double total1 = decimal.ToDouble((item.SANPHAM.GiaTien * item.SoLuong) * (100 - Convert.ToDecimal(item.SANPHAM.GiamGia)) / 100);
+                
+                        <tr>
+                            <td>@item.ID_GioHang</td>
+                            <td>@item.SANPHAM.TenSanPham</td>
+                            <td>@item.SoLuong</td>
+                            <td>@Web.Models.SANPHAM.ConvertToThousand64_From_Float(total1) VNĐ</td>
+                        </tr>
+                        tong += total1;
+                    }
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Tổng tiền:</td>
+                        <td>@Web.Models.SANPHAM.ConvertToThousand64_From_Float(tong) VNĐ</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <p>
+        @Html.ActionLink("Quay lại", "Index")
+    </p>
+    <p>
+        <a href="#" onclick="ExportPDF_new()">In hóa đơn</a>
+    </p>
+    </main> 
+<style>.tableNo td{padding-top: 30px;}.tableNo{margin-bottom: 30px;}</style>
+<script>
+    var url = window.location.href;
+    var arr = url.split("/");
+    var resultUrl = arr[0] + "//" + arr[2];
+    function ExportPDF_new() {
+        debugger;
+        $('body').append(`
+<form action="/GIOHANGs/ExportPDF" method="post" id="frmDetailPDF" style="display: none">
+    <input type="hidden" name="tenFilePDF" id="tenFilePDF" value="Hóa đơn" />
+    <input type="hidden" name="widthTable" id="widthTable" value="9000" />
+    <input type="hidden" name="baseUrl" id="baseUrl" value="" />
+    <textarea name="GridHtml" id="GridHtml"></textarea>
+    <input type="submit" />
+</form> `);
+        let style = get_css_print("html");
+        let searchForm = "";
+        searchForm = $("#FormHoSo").html();
+        $('#widthTable').val(1024);
+        var dataResult = style + searchForm;
+        //console.log(dataResult); modules.unblockUI(); return false;
+        let elem_append = "nt_DataResult";
+        $("#" + elem_append).remove();
+        $('body').append('<div id="' + elem_append + '">' + dataResult + '</div>');
+        let data = $("#" + elem_append).html();
+        //console.log(data); return false;
+        $("#GridHtml").val(data);
+        $("#" + elem_append).remove();
+        $("#frmDetailPDF").submit();
+        return true;
+    }
+    function get_css_print(ele) {
+        let style = `<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset='utf-8'/>
+    <style>
+    *{overflow: visible !important;}
+    body{ background: #fff !important; } hr{display:none; margin:0;}
+    .row>.row{float:left; display: unset;}
+    .row>.row>div{float:left;}.tableNo td{padding-top: 30px; border: 1px solid #fff;}.tableNo{margin-bottom: 30px;}
+</style>`;
+        let baseUrl = resultUrl;
+        $(ele + " link").each(function () {
+            let vl = this.outerHTML;
+            let n = vl.search("~");
+            if (n != -1) {
+                vl = vl.replace("~", baseUrl);
+            } else {
+                let m = vl.search(baseUrl);
+                if (m == -1) {
+                    vl = vl.replace("\"/", "\"" + baseUrl + "/");
+                }
+            }
+            style += vl;
+        });
+        $(ele + " style").each(function () { style += this.outerHTML; });
+        return style;
+    }
+</script>

@@ -1,0 +1,76 @@
+﻿@model Web.Models.DANHMUC
+
+@{
+    ViewBag.Title = "Details";
+}
+
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Chi tiết danh mục</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Chi tiết danh mục</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <div>
+           
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    Kiểu danh mục
+                </dt>
+                @if (Model.KieuDM == 1)
+            {
+                <dd>
+                    Đồ uống
+                </dd>
+            }
+            else if(Model.KieuDM==2)
+            {
+                <dd>
+                    Đồ ăn
+                </dd>
+            }
+                <dd></dd>
+                <dt>
+                    Tên danh mục
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.TenDanhMuc)
+                </dd>
+
+                <dt>
+                   Ghi chú
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.GhiChu)
+                </dd>
+
+                <dt>
+                   Ảnh bìa
+                </dt>
+
+                <dd>
+                    @{
+                        string ImagePath = "~/wwwoot/dataimg/" + Model.AnhBiaDM;
+                    }
+                    <img src="@Url.Content(ImagePath)" width="200" class="img-thumbnail" />
+                </dd>
+
+            </dl>
+        </div>
+        <p>
+            @Html.ActionLink("Cập nhật", "Edit", new { id = Model.ID_DanhMuc }) |
+            @Html.ActionLink("Quay lại", "Index")
+        </p>
+    </section>
+
+</main><!-- End #main -->

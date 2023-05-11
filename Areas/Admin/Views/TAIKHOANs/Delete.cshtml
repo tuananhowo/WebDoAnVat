@@ -1,0 +1,144 @@
+﻿@model Web.Models.TAIKHOAN
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<!-- End Sidebar-->
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Xoá tài khoản</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Xoá tài khoản</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+
+        <h3>Bạn có muốn xoá tài khoản này?</h3>
+        <div>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    Tên đăng nhập
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.TenDangNhap)
+                </dd>
+
+                <dt>
+                    Mật khẩu
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.MatKhau)
+                </dd>
+
+                <dt>
+                    Họ tên
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.HoTen)
+                </dd>
+
+                <dt>
+                    Email
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+
+                <dt>
+                    Ngày sinh
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.NgaySinh)
+                </dd>
+
+                <dt>
+                    Giới tính
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.GioiTinh)
+                </dd>
+
+                <dt>
+                    Địa chỉ
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.DiaChi)
+                </dd>
+
+                <dt>
+                    Tình trạng
+                </dt>
+
+                <dd>
+                    @if (Model.TinhTrang == 0)
+                    {
+                        <p>Hoạt động</p>
+                    }
+                    @if (Model.TinhTrang == 1)
+                    {
+                        <p>Không hoạt động</p>
+                    }
+                </dd>
+
+                <dt>
+                    Phân quyền
+                </dt>
+
+                <dd>
+                    @if (Model.PhanQuyen == 1)
+                    {
+                        <p>Admin</p>
+                    }
+                    @if (Model.PhanQuyen == 2)
+                    {
+                        <p>User</p>
+                    }
+                </dd>
+
+                <dt>
+                    Ngày tạo
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.NgayTao)
+                </dd>
+
+                <dt>
+                    Hình ảnh
+                </dt>
+
+                <dd>
+                    @{
+                        string ImagePath = "~/wwwoot/dataimg/" + Model.HinhAnh;
+                    }
+                    <img src="@Url.Content(ImagePath)" width="200" class="img-thumbnail" />
+                </dd>
+
+            </dl>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Xác nhận" class="btn btn-default" /> |
+                    @Html.ActionLink("Quay lại", "Index")
+                </div>
+            }
+        </div>
+</section>
+</main>

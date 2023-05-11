@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Web.Models.DANHMUC>
+
+@{
+    ViewBag.Title = "Quản lí danh mục";
+}
+<!-- End Sidebar-->
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Quản lí danh mục</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Danh mục</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <p>
+            @Html.ActionLink("Thêm mới", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    Tên danh mục
+                </th>
+                <th>
+                    Ghi chú
+                </th>
+                <th>
+                    Ảnh bìa
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenDanhMuc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GhiChu)
+                    </td>
+                    <td>
+                        @{
+                            string ImagePath = "~/wwwoot/dataimg/" + item.AnhBiaDM;
+                        }
+                        <img src="@Url.Content(ImagePath)" width="150" class="img-thumbnail" />
+                    </td>
+                    <td>
+                        @Html.ActionLink("Cập nhật", "Edit", new { id = item.ID_DanhMuc }) |
+                        @Html.ActionLink("Chi tiết", "Details", new { id = item.ID_DanhMuc }) |
+                        @Html.ActionLink("Xoá", "Delete", new { id = item.ID_DanhMuc })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </section>
+
+</main><!-- End #main -->
+
+

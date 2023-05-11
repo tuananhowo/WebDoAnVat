@@ -1,0 +1,167 @@
+﻿@model Web.Models.SANPHAM
+@using Web.Models
+@{
+    ViewBag.Title = "Create";
+    var lstDanhmuc = ViewData["ID_DanhMuc"] as List<DANHMUC>;
+}
+
+<!-- End Sidebar-->
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Thêm mới sản phẩm</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Sản phẩm</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+
+        @using (Html.BeginForm("Create", "SANPHAMs", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group" hidden>
+                    @Html.LabelFor(model => model.ID_SP, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ID_SP, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ID_SP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Danh mục
+                    <div class="col-md-10">
+                        <select class="form-control" name="ID_DanhMuc" onclick="load()" required>
+                            <option value="">- Chọn loại sản phẩm -</option>
+                            @foreach (var item in lstDanhmuc)
+                            {
+                                <option value="@item.ID_DanhMuc" code="@item.KieuDM">@item.TenDanhMuc</option>
+                            }
+                            </select>
+                          
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Tên sản phẩm
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.TenSanPham, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TenSanPham, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Ảnh bìa
+                    <div class="col-md-10">
+                        <img id="output" class="img-rounded" atl="Ảnh" width="180" height="200" src="~/wwwoot/dataimg/khonganh.png" />
+                        <p><label for="ufile" style="cursor: pointer;">Chọn file ảnh</label></p>
+                        <input name="ImageFile" id="ufile" type="file" style="display: none;" onchange="loadFile(event)" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Ảnh 1
+                    <div class="col-md-10">
+                        <img id="output1" class="img-rounded" atl="Ảnh" width="180" height="200" src="~/wwwoot/dataimg/khonganh.png" />
+                        <p><label for="ufile1" style="cursor: pointer;">Chọn file ảnh</label></p>
+                        <input name="ImageFile1" id="ufile1" type="file" style="display: none;" onchange="loadFile1(event)" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Ảnh 2
+                    <div class="col-md-10">
+                        @*@Html.EditorFor(model => model.Anh2, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Anh2, "", new { @class = "text-danger" })*@
+                        <img id="output2" class="img-rounded" atl="Ảnh" width="180" height="200" src="~/wwwoot/dataimg/khonganh.png" />
+                        <p><label for="ufile2" style="cursor: pointer;">Chọn file ảnh</label></p>
+                        <input name="ImageFile2" id="ufile2" type="file" style="display: none;" onchange="loadFile2(event)" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Giá tiền
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.GiaTien, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.GiaTien, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Giảm giá (%)
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.GiamGia, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.GiamGia, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Tình trạng
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.TinhTrang, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TinhTrang, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group sh">
+                    Số lượng
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.SoLuong, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SoLuong, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Mô tả
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.MoTa, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MoTa, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Thêm" class="btn btn-default"  />
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div>
+            @Html.ActionLink("Quay lại", "Index")
+        </div>
+
+        <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script>
+            var loadFile = function (event) {
+                var image = document.getElementById('output');
+                image.src = URL.createObjectURL(event.target.files[0]);
+            };
+            var loadFile1 = function (event) {
+                var image1 = document.getElementById('output1');
+                image1.src = URL.createObjectURL(event.target.files[0]);
+            };
+            var loadFile2 = function (event) {
+                var image2 = document.getElementById('output2');
+                image2.src = URL.createObjectURL(event.target.files[0]);
+            };
+            function load() {
+                var code = $("[name=ID_DanhMuc]  option:selected").attr("code");
+                if (code == 1) {
+                    $(".sh").hide();
+                } else if (code == 2) {
+                    $('.sh').show();
+                }
+            }
+        </script>
+    </section>
+</main>

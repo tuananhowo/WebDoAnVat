@@ -1,0 +1,202 @@
+﻿@model IEnumerable<Web.Models.GIOHANG>
+@using Web.Models
+@{
+    ViewBag.Title = "Index";
+    var listtt = ViewData["thanhtoan"] as List<THANHTOAN>;
+    <link href="~/css/csssr.css" rel="stylesheet" />
+}
+
+<!-- End Sidebar-->
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h1>Quản lý đơn hàng</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Đơn hàng</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+    <form action="/Admin/GIOHANGS/Index" class="search" method="get">
+        
+
+    </form>
+    <div class="table-responsive">
+        <table class="table" style="overflow-x: auto; white-space: nowrap;">
+            <tr>
+                <th>
+                    Mã hóa đơn
+                </th>
+
+                <th>
+                    Tên khách hàng
+                </th>
+                <th>
+                    Tên sản phẩm
+                </th>
+                <th>
+                    Số lượng mua
+                </th>
+                <th>
+                    Số điện thoại người nhận
+                </th>
+                <th>
+                    Địa chỉ giao
+                </th>
+                <th>
+                    Thành tiền
+                </th>
+                <th>
+                    Ngày đặt hàng
+                </th>
+                <th>
+                    Ngày giao hàng
+                </th>
+                <th>
+                    Tình trạng
+                </th>
+                <th>Thao tác</th>
+            </tr>
+            @{ int tt = 1; var idTT = 0; }
+            @foreach (var item in Model)
+            {
+                tt = 1;
+                double total = decimal.ToDouble((item.SANPHAM.GiaTien * item.SoLuong) * (100 - Convert.ToDecimal(item.SANPHAM.GiamGia)) / 100);
+                var countSP = item.ID_ThanhToan > 0 ? Model.Count(g => g.ID_ThanhToan == item.ID_ThanhToan) : 1;
+                <tr>
+
+                    @if (item.ID_ThanhToan != idTT)
+                    {
+                        tt++;
+                        <td rowspan="@countSP" style="text-align:center;vertical-align:middle;">@item.ID_ThanhToan</td>
+                        <td style="width: 10%; text-align: center; vertical-align: middle;" rowspan="@countSP">
+                            @Html.DisplayFor(modelItem => item.TAIKHOAN.HoTen)
+                        </td>
+
+                    }
+                    else if (item.ID_ThanhToan == 0 && item.ID_ThanhToan == idTT)
+                    {
+                        <td style="text-align:center;vertical-align:middle;">@item.ID_ThanhToan</td>
+                        <td style="width: 10%; text-align: center; vertical-align: middle;">
+                            @Html.DisplayFor(modelItem => item.TAIKHOAN.HoTen)
+                        </td>
+                    }
+
+
+
+
+                    <td style="width: 10%;vertical-align:middle;">
+                        @Html.DisplayFor(modelItem => item.SANPHAM.TenSanPham)
+                    </td>
+                    <td style="text-align: center; width: 10%; vertical-align: middle;">
+                        @Html.DisplayFor(modelItem => item.SoLuong)
+                    </td>
+                    @if (item.ID_ThanhToan != idTT)
+                    {
+                        <td rowspan="@countSP" style="width: 10%; text-align: center; vertical-align: middle;">
+                            @Html.DisplayFor(modelItem => item.TAIKHOAN.SDT)
+                        </td>
+                        <td rowspan="@countSP" style="width: 10%; text-align: center; vertical-align: middle;">
+                            @Html.DisplayFor(modelItem => item.TAIKHOAN.DiaChi)
+                        </td>
+
+                    }
+                    else if (item.ID_ThanhToan == 0 && item.ID_ThanhToan == idTT)
+                    {
+                        <td style="width: 10%; text-align: center; vertical-align: middle;">
+                            @Html.DisplayFor(modelItem => item.TAIKHOAN.SDT)
+                        </td>
+                        <td style="width: 10%; text-align: center; vertical-align: middle;">
+                            @Html.DisplayFor(modelItem => item.TAIKHOAN.DiaChi)
+                        </td>
+                    }
+
+                    <td style="width: 10%; text-align: left; vertical-align: middle;">
+                        @total.ToString("F99").TrimEnd('0').Trim('.') VNĐ
+                    </td>
+                    <td style="vertical-align: middle;">
+                        @if (item.NgayDatHang != null)
+                        {
+                            @item.NgayDatHang.Value.ToString("dd-MM-yyyy")
+                        }
+
+                    </td>
+                    @if (listtt.Count(g => g.ID_ThanhToan == item.ID_ThanhToan && g.TinhTrang == 2) > 0)
+                    {
+                        <td style="width: 10%; vertical-align: middle;">@listtt.FirstOrDefault(g => g.ID_ThanhToan == item.ID_ThanhToan && g.TinhTrang == 2).NgayTao.ToString("dd-MM-yyyy")</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    <td style="width: 10%; vertical-align: middle;">
+                        @if (item.TinhTrang == 0)
+                        {
+                            <p style="color: #6220f2; font-weight: bold; font-size: 16px;">Chờ đặt hàng</p>
+                        }
+                        @if (item.TinhTrang == 1)
+                        {
+                            <p style="color: #0faff6; font-weight: bold; font-size: 16px;">Đã xác nhận</p>
+                        }
+                        @if (item.TinhTrang == 2)
+                        {
+                            <p style="color: #ffd800; font-weight: bold; font-size: 16px;" class="stt_@item.ID_ThanhToan">Đặt hàng thành công</p>
+                        }
+                        @if (item.TinhTrang == 3)
+                        {
+                            <p style="color: #0e7406; font-weight: bold; font-size: 16px;">Đã thanh toán</p>
+                        }
+                        @if (item.TinhTrang == 4)
+                        {
+                            <p style="color: red; font-weight: bold; font-size: 16px;">Hủy đơn</p>
+                        }
+                    </td>
+                    @if (item.ID_ThanhToan != idTT)
+                    {
+                        <td style="width: 10%; text-align: center; vertical-align: middle;" rowspan="@countSP">
+                            @Html.ActionLink("Xem hoá đơn", "Details", new { id = item.ID_GioHang })
+                            @if (item.TinhTrang == 2)
+                            {
+                                <p id="tt" onclick="thanhtoan(@item.ID_GioHang, @item.ID_ThanhToan)">Đã thanh toán</p>
+                            }
+
+                        </td>
+
+                    }
+                    else if (item.ID_ThanhToan == 0 && item.ID_ThanhToan == idTT)
+                    {
+                        <td style="width: 10%; vertical-align: middle;">
+                            @Html.ActionLink("Xem hoá đơn", "Details", new { id = item.ID_GioHang })
+                            @if (item.TinhTrang == 2)
+                            {
+                                <p id="tt" onclick="thanhtoan(@item.ID_GioHang, @item.ID_ThanhToan)">Đã thanh toán</p>
+                            }
+
+                        </td>
+                    }
+
+
+                </tr>
+                idTT = Convert.ToInt32(item.ID_ThanhToan);
+            }
+
+        </table>
+    </div>
+    <section class="section dashboard">
+    </section>
+</main>
+<script>
+    function thanhtoan(id, idTT) {
+        $.ajax({
+            url: "/Admin/GIOHANGs/DaTT/", type: "POST", data: { id: id, idtt: idTT }, success: function (result) {
+                $(".stt_" + idTT).html("Đã thanh toán").css("color", "#5ce0f8")
+                location.reload();
+            }
+        });
+    }
+    function loaddl() {
+        debugger;
+        var ma = document.getElementById('ma').value;
+        window.location.href = "/Admin/GIOHANGs/Index?ma=" + ma;
+    }
+</script>

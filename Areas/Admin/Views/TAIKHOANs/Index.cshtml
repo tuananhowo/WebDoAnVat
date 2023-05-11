@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Web.Models.TAIKHOAN>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<!-- End Sidebar-->
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Quản lí tài khoản</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Tài khoản</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <p>
+            @Html.ActionLink("Thêm mới", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    Tên đăng nhập
+                </th>
+                <th>
+                    Họ tên
+                </th>
+                <th>
+                    Email
+                </th>
+               
+                <th>
+                    Giới tính
+                </th>
+                <th>
+                    Địa chỉ
+                </th>
+                <th>
+                    Số điện thoại
+                </th>
+                <th>
+                    Hình ảnh
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TenDangNhap)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HoTen)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GioiTinh)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaChi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m=>item.SDT)
+                    </td>
+                    <td>
+                        @{
+                            string ImagePath = "~/wwwoot/dataimg/" + item.HinhAnh;
+                        }
+                        <img src="@Url.Content(ImagePath)" width="150" class="img-thumbnail" />
+                    </td>
+                    <td>
+                        @Html.ActionLink("Cập nhật", "Edit", new { id = item.ID_TK }) |
+                        @Html.ActionLink("Chi tiết", "Details", new { id = item.ID_TK }) |
+                        @Html.ActionLink("Xoá", "Delete", new { id = item.ID_TK })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </section>
+</main>

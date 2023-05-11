@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Web.Models.Banner>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Quản lí banner website</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Banner")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Banner</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+        <p>
+            @Html.ActionLink("Thêm mới", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th class="text-center">
+                    Số thứ tự
+                </th>
+                <th class="text-center">
+                    Ảnh
+                </th>
+                <th class="text-center">
+                   Thứ tự ảnh
+                </th>
+                <th class="text-center">
+                    Thao tác
+                </th>
+            </tr>
+            @{var stt = 1;}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">
+                        @stt
+                    </td>
+                    @{string ImagePath = "/wwwoot/dataimg/" + item.LinkBanner;
+                    }
+                    <td class="text-center"><img src="@ImagePath" width="450px" height="300px" /></td>
+                    <td class="text-center">Banner @item.ThuTu</td>
+                    <td class="text-center">
+                        @Html.ActionLink("Cập nhật", "Edit", new { id = item.Id })
+                    </td>
+                </tr>
+                            stt++;
+                        }
+
+        </table>
+    </section>
+</main>

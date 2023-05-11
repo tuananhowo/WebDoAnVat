@@ -1,0 +1,85 @@
+﻿@model Web.Models.DANHMUC
+
+@{
+    ViewBag.Title = "Edit";
+    var ImagePath = "~/wwwoot/dataimg/" + Model.AnhBiaDM;
+}
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Cập nhật danh mục</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Cập nhật danh mục</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+
+        @using (Html.BeginForm(Html.BeginForm("Edit", "DANHMUCs", FormMethod.Post, new { enctype = "multipart/form-data" })))
+        {
+            @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.ID_DanhMuc)
+            <div class="form-group">
+                Kiểu danh mục
+                <div class="col-md-10">
+                    <select name="KieuDM" id="KieuDM" class="form-control">
+                        <option value="1" @(Model.KieuDM == 1 ? "selected" : "")>Đồ uống</option>
+                        <option value="2" @(Model.KieuDM == 2 ? "selected" : "")>Đồ ăn</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                Tên danh mục
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TenDanhMuc, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TenDanhMuc, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                Ghi chú
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.GhiChu, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.GhiChu, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                Ảnh bìa
+                <div class="col-md-10">
+                    <img id="output" class="img-rounded" alt="Ảnh" width="180" height="200" src="@Url.Content(@ImagePath)" />
+                    <p><label for="ufile" style="cursor:  pointer;"> Chọn  file  ảnh </label></p>
+                    <input name="ImageFile" id="ufile" type="file" style="display:  none;" onchange="loadFile(event)" />
+                    @Html.HiddenFor(model => model.AnhBiaDM, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AnhBiaDM, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Lưu" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+        }
+
+        <div>
+            @Html.ActionLink("Quay lại", "index")
+        </div>
+    </section>
+    <script>
+        var loadFile = function (event) {
+            var image = document.getElementById('output');
+            image.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
+</main><!-- End #main -->
