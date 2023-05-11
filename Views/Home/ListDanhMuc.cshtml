@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Web.Models.DANHMUC>
+@foreach (var item in Model)
+{
+    <li class="hoverr">
+        <a href="@Url.Action("ListSanPham","Home",new {id = item.ID_DanhMuc.ToString().Trim()})">
+            @Html.DisplayFor(modelItem => item.TenDanhMuc)
+        </a>
+        <br />
+        <hr />
+    </li>
+    
+}

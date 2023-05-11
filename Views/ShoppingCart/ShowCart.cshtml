@@ -1,0 +1,350 @@
+﻿@model IEnumerable<Web.Models.GIOHANG>
+@using Web.Models
+@{
+    Layout = null;
+    Cart cart = Session["Cart"] as Cart;
+    int count = 0;
+    if (cart != null)
+    {
+        count = cart.Items.Count();
+    }
+    string actionName = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString();
+    string controllerName = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+    bool activeHome = actionName == "Index";
+    bool activeHome1 = actionName == "ListSanPham";
+    bool activeHome3 = actionName == "BanDo";
+    var listasp = ViewData["sp"] as List<SANPHAM>;
+    var TinhTrang = Request["TinhTrang"];
+}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Coffee</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="~/wwwoot/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/wwwoot/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/wwwoot/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/wwwoot/css/nice-select.css" type="text/css">
+    <link href="~/css/templatemo-style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/wwwoot/css/jquery-ui.min.css" type="text/css">
+    <link href="~/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/wwwoot/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/wwwoot/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/wwwoot/css/style.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Damion" />
+    <link rel="shortcut icon" href="~/img/logo.png" type="image/x-icon" />
+    <link href="~/css/StyleSheet1.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <!-- Humberger End -->
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header__top__left">
+                            <ul>
+                                <li>Miễn phí giao hàng cho đơn từ 99k</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header__top__right">
+                            <div class="header__top__right__social">
+                                <a href="https://www.facebook.com/ban.tre.7773/"><i class="fa fa-facebook"></i></a>
+                            </div>
+                            <div class="header__top__right__auth">
+
+                                @if (Session["HoTen"] != null)
+                                {
+                                    <ul class="nav">
+                                        <li><a href="#"><img src="~/wwwoot/dataimg/@Session["HinhAnh"]" alt="Profile" class="rounded-circle" style="width:30px; height: 30px;"></a></li>
+                                        <li>
+                                            <a href="#" class="hoten">@Session["HoTen"]</a>
+                                            <ul class="sub-menu">
+                                                <li>
+                                                    <a href="/Home/ThongTinCN/@Session["ID_TK"]">Thông tin cá nhân</a>
+                                                    <ul class="sub-menu1">
+                                                        <li><a href="/Home/SuaTT/@Session["ID_TK"]">Đổi mật khẩu</a></li>
+                                                        <li><a href="/Shoppingcart/ShowCart">Đơn hàng</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="@Url.Action("Logout", "Home")">Đăng xuất</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Login", "Home")">Đăng nhập</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="background:#000000;max-width:100% !important;margin-bottom:50px">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="tm-logo-container" style="float:right">
+                        <img src="~/img/logo.png" height="40px" width="40px" alt="Logo" class="tm-site-logo">
+                        <a href="@Url.Action("Index", "Home")">
+                            <h1 class="tm-site-name tm-handwriting-font">Food</h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <nav class="tm-nav" style="height:100%;float:right">
+                        <ul>
+                            <li><a class="@(activeHome ? "active" : "")" href="@Url.Action("Index", "Home")">Trang chủ</a></li>
+                            <li><a class="@(activeHome1 ? "active" : "")" href="@Url.Action("ListSanPham", "Home")">Mua hàng</a></li>
+                            <li><a class="@(activeHome3 ? "active" : "")" href="@Url.Action("BanDo", "Home")">Bản đồ</a></li>
+                            <li><a href="https://www.facebook.com/ban.tre.7773/">Liên hệ</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-2">
+                    <div class="header__cart">
+                        <ul>
+                            <li><a href="/Shoppingcart/ShowToCart" onclick="load()"><i class="fa fa-shopping-bag"></i> <span>@count</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <section class="hero">
+        <div class="section-title">
+            <h2>DANH SÁCH ĐƠN HÀNG</h2>
+        </div>
+        <div class="container" style="max-width:80%">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-link @(string.IsNullOrEmpty(TinhTrang) ? "active" : "")" href="/Shoppingcart/ShowCart" style="color:#000000">Tất cả</a>
+                    <a class="nav-link @(TinhTrang == "0" ? "active" : "")" href="/Shoppingcart/ShowCart?TinhTrang=0" style="color:#000000">Chờ đặt hàng</a>
+                    <a class="nav-link @(TinhTrang == "1" ? "active" : "")" href="/Shoppingcart/ShowCart?TinhTrang=1" style="color:#000000">Đã xác nhận</a>
+                    <a class="nav-link @(TinhTrang == "2" ? "active" : "")" href="/Shoppingcart/ShowCart?TinhTrang=2" style="color:#000000">Đang giao hàng</a>
+                    <a class="nav-link @(TinhTrang == "3" ? "active" : "")" href="/Shoppingcart/ShowCart?TinhTrang=3" style="color:#000000">Đã nhận hàng</a>
+                    <a class="nav-link @(TinhTrang == "4" ? "active" : "")" href="/Shoppingcart/ShowCart?TinhTrang=4" style="color:#000000">Đơn hủy</a>
+                </div>
+            </nav>
+            @if (Model != null)
+            {
+                <table class="table table-bordered">
+
+                    <thread>
+                        <tr>
+                            <th style="width:auto" class="text-center">Mã thanh toán</th>
+                            <th style="width:10%" class="text-center">Tên sản phẩm</th>
+                            <th style="width:15%;text-align:center">Ảnh</th>
+                            <th style="text-align:center">Giá</th>
+                            <th style="text-align:center">Giảm giá</th>
+                            <th style="text-align:center">Số lượng</th>
+                            <th style="text-align:center">Thành tiền</th>
+                            <th style="text-align:center">Tình trạng đơn hàng</th>
+                            <th style="text-align:center">Thao tác</th>
+                        </tr>
+
+                    </thread>
+                    <tbody>
+                        @{ int tt = 1, idTT = 0; }
+                        @foreach (var item in Model)
+                        {
+                            tt = 1;
+                            double total = decimal.ToDouble((listasp.FirstOrDefault(g => g.ID_SP == item.ID_SP).GiaTien * item.SoLuong) * (100 - Convert.ToDecimal(listasp.FirstOrDefault(g => g.ID_SP == item.ID_SP).GiamGia)) / 100);
+                            var gg = decimal.ToDouble(listasp.FirstOrDefault(g => g.ID_SP == item.ID_SP).GiaTien * Convert.ToDecimal(listasp.FirstOrDefault(g => g.ID_SP == item.ID_SP).GiamGia)) / 100;
+                            var countSP = item.ID_ThanhToan > 0 ? Model.Count(g => g.ID_ThanhToan == item.ID_ThanhToan) : 1;
+                            if (item.ID_ThanhToan > 0 && item.ID_ThanhToan == idTT)
+                            {
+                                tt++;
+                            }
+                            idTT = item.ID_ThanhToan;
+                            <tr>
+                                @if (tt == 1)
+                                {
+                                    if (item.ID_ThanhToan > 0)
+                                    {
+                                        <td rowspan="@countSP" align="center" style="vertical-align: middle">@item.ID_ThanhToan</td>
+                                    }
+                                    else
+                                    {
+                                        <td rowspan="@countSP" align="center" style="vertical-align: middle"></td>
+                                    }
+
+                                }
+                                <td class="text-center">@listasp.FirstOrDefault(g => g.ID_SP == item.ID_SP).TenSanPham</td>
+                                <td>
+                                    @{
+                                        string ImagePath = "~/wwwoot/dataimg/" + listasp.FirstOrDefault(g => g.ID_SP == item.ID_SP).AnhBia;
+
+
+                                    }
+                                    <img src="@Url.Content(ImagePath)" class="hover" />
+                                </td>
+                                <td class="text" style="text-align:center">@listasp.FirstOrDefault(g => g.ID_SP == item.ID_SP).GiaTien.ToString("F99").TrimEnd('0').Trim('.') VNĐ</td>
+
+                                <td class="text" style="text-align:center"> @gg VNĐ </td>
+                                @*<td style="width:15%">
+                                @using (Html.BeginForm("Update_soluong", "ShoppingCart"))
+                                {
+                                    <input type="hidden" value="@item.product.ID_SP" name="ID_SP">
+                                    <input type="number" value="@item.Quantity" name="so_luong" />
+                                    <input type="submit" class="site-btn1" value="Cập nhật" />
+                                }
+                                @using (Html.BeginForm("Xoa", "ShoppingCart"))
+                                {
+                                    <input type="hidden" value="@item.product.ID_SP" name="ID_SP">
+                                    <input type="submit" class="site-btn1" value="Xóa" />
+                                }
+                            </td>*@
+                                <td class="text" style="text-align:center">@item.SoLuong</td>
+                                <td class="text-center">@total VNĐ</td>
+
+                                @if (tt == 1)
+                                {
+
+
+                                    if (item.TinhTrang == 0)
+                                    {
+                                        <td rowspan="@countSP" align="center" style="vertical-align: middle;color:#6220f2">Chờ đặt hàng</td>
+                                        <td rowspan="@countSP" align="center" style="vertical-align: middle"><a href="@Url.Action("HuyDon", "ShoppingCart", new {Id_GioHang=item.ID_GioHang})" class="site-btn1">Hủy</a> </td>
+                                    }
+                                    else if (item.TinhTrang == 1)
+                                    {
+                                        <td rowspan="@countSP" align="center" style="vertical-align: middle;color:#0faff6">Đã xác nhận</td>
+                                        <td rowspan="@countSP" align="center" style="vertical-align: middle"><a href="@Url.Action("HuyDon", "ShoppingCart", new {Id_GioHang=item.ID_GioHang})" class="site-btn1">Hủy</a> </td>
+                                    }
+                                    else if (item.TinhTrang == 2)
+                                    {
+                                        <td rowspan="@countSP" align="center" style="vertical-align: middle;color:#ffd800">Đang giao hàng</td>
+                                    }
+                                    else if (item.TinhTrang == 3)
+                                    {
+                                        <td rowspan="@countSP" align="center" style="vertical-align: middle;color:#0e7406">Đã nhận hàng</td>
+                                    }
+                                    else
+                                    {
+                                        <td rowspan="@countSP" align="center" style="vertical-align: middle;color:red">Đã hủy đơn</td>
+                                    }
+                                }
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+                <br />
+            }
+            <style>
+                .text {
+                    text-align: center;
+                }
+            </style>
+
+
+
+        </div>
+    </section>
+    <footer class="footer spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 tm-logo-container" style="float:right">
+                    <img src="~/img/logo.png" height="40px" width="40px" alt="Logo" class="tm-site-logo">
+                    <a href="@Url.Action("Index", "Home")">
+                        <h1 class="tm-site-name tm-handwriting-font">Food</h1>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <ul>
+                            <li>Địa chỉ:</li>
+                            <li>70 Xuân Phương - Hương Canh - Nam Từ Liêm - Hà Nội</li>
+                            <li>Hotline: 0353262205</li>
+                            <li>Email: tuananhowo@gmail.com</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6 col-sm-6 offset-lg-1">
+                    <div class="footer__widget">
+                        <h6>Liên kết</h6>
+                        <ul>
+                            <li><a href="https://www.facebook.com/ban.tre.7773/">Liên hệ</a></li>
+                            <li><i class="fa fa-envelope"></i> tuananhowo@gmail.com</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12">
+                    <div class="footer__widget">
+                        <h6>NHẬN TIN TỨC MỚI NHẤT</h6>
+                        <p>Hãy để lại email cho chúng tôi.</p>
+                        <form action="#">
+                            <a href="@Url.Action("Register","Home")" class="site-btn">Đăng kí</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="footer__copyright">
+                        <div class="footer__copyright__text">
+                        </div>
+                        <div class="footer__copyright__payment"><img src="~/wwwoot/img/Untitled-4.jpg" /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Footer Section End -->
+    <!-- Js Plugins -->
+    <script src="~/wwwoot/js/jquery-3.3.1.min.js"></script>
+    <script src="~/wwwoot/js/bootstrap.min.js"></script>
+    <script src="~/wwwoot/js/jquery.nice-select.min.js"></script>
+    <script src="~/wwwoot/js/jquery-ui.min.js"></script>
+    <script src="~/wwwoot/js/jquery.slicknav.js"></script>
+    <script src="~/wwwoot/js/mixitup.min.js"></script>
+    <script src="~/wwwoot/js/owl.carousel.min.js"></script>
+    <script src="~/wwwoot/js/main.js"></script>
+</body>
+
+</html>
+<script>
+    function tinhtien() {
+        var a=0;
+        @foreach (var item in Model)
+        {
+        <text>
+        a += (@listasp.FirstOrDefault(g => g.ID_SP == item.ID_SP).GiaTien * @item.SoLuong) - (@listasp.FirstOrDefault(g => g.ID_SP == item.ID_SP).GiaTien*@listasp.FirstOrDefault(g => g.ID_SP == item.ID_SP).GiamGia * @item.SoLuong* 1 / 100);
+        </text>
+        }
+
+        a = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'VND' }).format(a);
+        $("#tien").text(a );
+    }
+    tinhtien();
+    function load() {
+        window.load();
+    }
+</script>
+@if (Request["sc"] == "1")
+{
+    <script>alert("Đặt hàng không thành công do số lượng lớn hơn số lượng trong kho.");</script>
+}

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Web.Models.SANPHAM>
+
+
+<div class="col-md-12">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-3">
+                <div class="product__item">
+
+                    @{
+                        //Lấy đường dẫn file ảnh
+                        string ImagePath = "~/wwwoot/dataimg/" + item.AnhBia;
+                    }
+                    <div class="product__item__pic set-bg" data-setbg="@Url.Content(ImagePath)" >
+                        <ul class="product__item__pic__hover" style="display:flex;margin-left:40%">
+                            @{
+                                var pq = (int?)Session["PQ"] ?? 0;
+                            }
+                            <li><a href="javascript:;" onclick="check(@item.ID_SP,@pq)"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+                    </div>
+                    @*<a href="/ShoppingCart/AddtoCart/@item.ID_SP"><i class="fa fa-shopping-cart"></i></a>*@
+                    <div class="product__item__text">
+                        <h6 class="price-new">@Web.Models.SANPHAM.ConvertToThousand64_From_Float(item.GiaTien.ToString("F99").TrimEnd('0').Trim('.')) VNĐ</h6>
+                        @if(item.GiamGia != 0)
+                {
+                    <h6>Giảm giá: @item.GiamGia %</h6>
+                }
+                        
+                        <a href="@Url.Action("XemChiTiet","Home", new { id = item.ID_SP.ToString().Trim()})"><h5>@Html.DisplayFor(modelItem => item.TenSanPham)</h5></a>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+    </div>
+
+<script>
+    function check(id,pq) {
+        debugger;
+        var matkk = document.cookie;
+        if (matkk == "" | pq!=3) {
+            alert("Yêu cầu đăng nhập trước khi mua hàng");
+            window.location.href = '/Home/Login';
+            return false;
+        }
+        else {
+            window.location.href = '/ShoppingCart/AddtoCart/' + id;
+            alert("Đã thêm vào giỏ hàng thành công");
+        }
+    }
+
+</script>

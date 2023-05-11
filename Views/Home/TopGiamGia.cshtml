@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Web.Models.SANPHAM>
+
+<div class="row">
+    <div class="product__discount__slider owl-carousel">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-4">
+                <div class="product__discount__item">
+                    
+                        @{
+                            //Lấy đường dẫn file ảnh
+                            string ImagePath = "~/wwwoot/dataimg/" + item.AnhBia;
+                        }
+                        <div class="product__discount__item__pic set-bg"
+                             data-setbg="@Url.Content(ImagePath)">
+                            <ul class="product__item__pic__hover" style="display:flex;margin-left:40%">
+                                <li><a href="@Url.Action("XemChiTiet","Home", new { id = item.ID_SP.ToString().Trim()})"><i class="fa fa-file"></i></a></li>
+                                <li><a href="/ShoppingCart/AddtoCart/@item.ID_SP"><i class="fa fa-shopping-cart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__discount__item__text">
+                            <h6>Giảm giá: @Html.DisplayFor(modelItem => item.GiamGia) %</h6>
+                            <div class="product__item__price"><h5 >@Web.Models.SANPHAM.ConvertToThousand64_From_Float(item.GiaTien.ToString("F99").TrimEnd('0').Trim('.')) VNĐ</h5></div>
+                            <a href="@Url.Action("XemChiTiet","Home", new { id = item.ID_SP.ToString().Trim()})"><h5 style="font-weight: 700;">@Html.DisplayFor(modelItem => item.TenSanPham)</h5></a>
+                        </div>
+                       
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

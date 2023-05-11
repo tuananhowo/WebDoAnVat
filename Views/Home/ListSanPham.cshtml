@@ -1,0 +1,90 @@
+﻿    <!-- Hero Section Begin -->
+<section class="hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                </div>
+                <div class="col-lg-9">
+                    <div class="hero__search">
+                        <div class="hero__search__form" style="display:flex;align-items:center">
+                            @using (Html.BeginForm("ListSanPham", "Home", new { @class = "search" }))
+                            {
+                                <input type="text" placeholder="Bạn cần tìm gì ?" name="keysearch" style="width:100%">
+                                <button type="submit" class="site-btn">Tìm kiếm</button>
+                            }
+                        </div>
+                        <div class="hero__search__phone">
+                            <div class="hero__search__phone__icon">
+                                <i class="fa fa-phone"></i>
+                            </div>
+                            <div class="hero__search__phone__text">
+                                <h5>012345678</h5>
+                                <span>Hỗ trợ 24/7</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+</section>
+<!-- Hero Section End -->
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="https://demoda.vn/wp-content/uploads/2022/01/hinh-nen-go.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Đồ ăn vặt</h2>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Product Section Begin -->
+<section class="product spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="hero__categories">
+                    <div class="hero__categories__all">
+                        <i class="fa fa-bars"></i>
+                        <span>DANH MỤC</span>
+                    </div>
+                    <ul>
+                        @{
+                            Html.RenderAction("ListDanhMuc", "Home");
+                        }
+                    </ul>
+                </div>
+                <div class="sidebar__item">
+                    <div class="latest-product__text">
+                        <h4>Sản phẩm mới</h4>
+                        @{
+                            Html.RenderAction("SanPhamMoi", "Home");
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-7">
+                <div class="section-title product__discount__title">
+                    <h2>Danh sách sản phẩm</h2>
+                </div>
+                @{
+                    Html.RenderAction("AllSanPham", "Home");
+                }
+                <div class="product__discount">
+                    <div class="section-title product__discount__title">
+                        <h2>Top giảm giá</h2>
+                    </div>
+                    @{
+                        Html.RenderAction("TopGiamGia", "Home");
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Product Section End -->

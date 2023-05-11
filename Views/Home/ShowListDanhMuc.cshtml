@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Web.Models.DANHMUC>
+<section class="categories">
+    <div class="container">
+        <div class="row">
+            <div class="categories__slider owl-carousel">
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-3">
+                        @{
+                            //Lấy đường dẫn file ảnh
+                            string ImagePath = "~/wwwoot/dataimg/" + item.AnhBiaDM;
+                        }
+                        <div class="categories__item set-bg" data-setbg="@Url.Content(ImagePath)">
+                            <h5><a href="/Home/ListSanPham/@item.ID_DanhMuc">@Html.DisplayFor(modelItem => item.TenDanhMuc)</a></h5>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</section>
